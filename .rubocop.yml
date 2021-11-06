@@ -1,0 +1,84 @@
+AllCops:
+  Exclude:
+    - db/schema.rb
+    - db/migrate/*
+    - config/environments/*
+    - config/routes.rb
+
+Style/Documentation:
+  Enabled: false
+
+Layout/LineLength:
+  Max: 120
+
+Metrics/MethodLength:
+  Max: 15
+
+Metrics/BlockLength:
+  Exclude:
+    - '**/*_spec.rb'
+
+Metrics/ModuleLength:
+  Exclude:
+    - '**/*_spec.rb'
+Metrics/ParameterLists:
+  CountKeywordArgs: false
+
+Metrics/ClassLength:
+  Max: 250
+
+Lint/AmbiguousBlockAssociation:
+  Enabled: false
+
+Lint/RaiseException:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: true
+
+Lint/RedundantSplatExpansion:
+  Enabled: false
+
+Style/NumericLiteralPrefix:
+  EnforcedOctalStyle: zero_only
+
+Style/BlockComments:
+  Enabled: false
+
+Style/Lambda:
+  Enabled: false
+
+Style/LambdaCall:
+  Enabled: false
+
+Style/PercentLiteralDelimiters:
+  Enabled: false
+
+Style/RaiseArgs:
+  Enabled: false
+  EnforcedStyle: compact
+
+Style/SignalException:
+  Enabled: false
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/ExponentialNotation:
+  Enabled: true
+
+Layout/HashAlignment:
+  EnforcedHashRocketStyle: table
+  EnforcedColonStyle: table
+
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: true
+
+Naming/RescuedExceptionsVariableName:
+  Enabled: false
