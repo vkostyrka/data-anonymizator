@@ -1,0 +1,16 @@
+- if notice
+  #success-alert.alert.alert-success
+    %strong
+      =notice
+- if alert
+  #danger-alert.alert.alert-danger
+    %strong
+      =alert
+
+:javascript
+  $("#success-alert").fadeTo(3000, 500).slideUp(500, function(){
+  $("#success-alert").slideUp(500);
+  });
+  $("#danger-alert").fadeTo(3000, 500).slideUp(500, function(){
+  $("#danger-alert").slideUp(500);
+  });

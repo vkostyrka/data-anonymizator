@@ -1,0 +1,9 @@
+- if current_user
+  %nav.navbar.navbar-light.bg-light
+    %a.navbar-brand{:href => root_path} Data Anonymizator
+    .pull_right
+      .btn-group.dropleft
+        %button.btn.btn-secondary
+          = current_user.email
+        = link_to "Logout", destroy_user_session_path, method: :delete, class: 'btn btn-info'
+
