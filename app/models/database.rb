@@ -3,5 +3,5 @@
 class Database < ApplicationRecord
   belongs_to :user
   enum dbms_type: { sqlite: 0 }
-  mount_uploader :avatar, FileUploader
+  mount_uploader :file, FileUploader
 end

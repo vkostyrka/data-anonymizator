@@ -1,1 +1,42 @@
-%h1 Hello
+.pull-right.my-3
+  %button.btn.btn-primary{"data-bs-target" => "#create-database-modal", "data-bs-toggle" => "modal"}
+    Add database
+#create-database-modal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "create-database-modal", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title Add new database
+        %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} ×
+      = form_with model: Database.new, url: database_index_path do |f|
+        .modal-body
+          .row
+            .col-3
+              = f.label :file
+              = f.label :dbms_type
+            .col-9
+              = f.file_field :file, class: 'mw-100'
+              = f.select :dbms_type, options_for_select(Database.dbms_types.keys)
+        .modal-footer
+          = f.submit("Create", class: "btn-primary btn")
+
+- if @databases.length == 0
+  %h5 Your databases list is empty
+- else
+  %h5 Your databases
+  %table.table.table-hover
+    %thead
+      %tr
+        %th{:scope => "col"} #
+        %th{:scope => "col"} Name
+        %th{:scope => "col"} DBMS Type
+    %tbody
+      - @databases.each_with_index do |database_item, index|
+        %tr
+          %th{:scope => "row"} #{index+1}
+          %td #{database_item.file.identifier}
+          %td #{database_item.dbms_type}
+          %td
+            = link_to "Show & Anonymize", database_path(database_item), class: 'btn btn-info'
+          %td
+            = link_to "Delete", database_path(database_item), class: 'btn btn-danger', method: :delete
