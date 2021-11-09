@@ -2,6 +2,9 @@
 
 class Database < ApplicationRecord
   belongs_to :user
+  has_many :anonymized, :class_name => "Database", foreign_key: 'original_id'
+  belongs_to :original, :class_name => "Database", :optional => true
+
   enum dbms_type: { sqlite: 0 }
   mount_uploader :file, FileUploader
 
