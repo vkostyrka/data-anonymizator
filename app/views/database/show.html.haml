@@ -1,0 +1,26 @@
+.my-2
+  Choose table:
+  = select_tag(:table_name, options_for_select(@tables_names, @current_table_name), onchange: "handleTableName()")
+
+%table#myTable
+  %thead
+    %tr
+      - @current_table_columns.each do |header|
+        %th.text-truncate #{header}
+  %tbody
+    - @current_table_data.each do |row|
+      %tr
+        - row.each do |item|
+          %td #{item}
+
+:javascript
+  $(document).ready( function () {
+      $('#myTable').DataTable()
+    });
+
+  function handleTableName() {
+    let selectValue = $("#table_name option:selected").text()
+    const url = new URL(location.href);
+    url.searchParams.set('table_name', selectValue);
+    window.location.href = url;
+  }

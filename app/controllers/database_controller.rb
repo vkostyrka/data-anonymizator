@@ -7,22 +7,16 @@ class DatabaseController < ApplicationController
     @databases = Database.where(user: current_user)
   end
 
-  # def show
-  #   @dataset = Dataset.find(params[:id])
-  #
-  #   redirect_to root_path, alert: "It's not your dataset" unless current_user.id == @dataset.user_id
-  #
-  #   @filters = @dataset.filters.where.not(filtered_id: [0]).each(&:filter_name)
-  #   @headers = @dataset.headers
-  #   @counts = @dataset.counts
-  #
-  #   @data = prepare_data(params, @dataset)
-  #
-  #   respond_to do |format|
-  #     format.html
-  #     format.json { render json: { data: @data } }
-  #   end
-  # end
+  def show
+    @database = Database.find(params[:id])
+
+    redirect_to root_path, alert: "It's not your database" unless current_user.id == @database.user_id
+
+    @tables_names = @database.table_names
+    @current_table_name = params[:table_name] || @tables_names[0]
+    @current_table_columns = @database.table_columns(@current_table_name)
+    @current_table_data = @database.table_data(@current_table_name)
+  end
 
   def create
     @database = Database.new(database_params.merge(user: current_user))
