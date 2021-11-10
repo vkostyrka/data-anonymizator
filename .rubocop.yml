@@ -4,6 +4,7 @@ AllCops:
     - db/migrate/*
     - config/environments/*
     - config/routes.rb
+  SuggestExtensions: false
 
 Style/Documentation:
   Enabled: false

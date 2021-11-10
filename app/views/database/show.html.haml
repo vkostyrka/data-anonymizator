@@ -2,6 +2,9 @@
   Choose table:
   = select_tag(:table_name, options_for_select(@tables_names, @current_table_name), onchange: "handleTableName()")
 
+= form_with url: database_anonymize_path(@database) do |f|
+  = f.submit("Anonymize", class: "btn-secondary btn")
+
 %table#myTable
   %thead
     %tr
