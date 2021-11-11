@@ -1,3 +1,18 @@
+GIT
+  remote: https://github.com/vkostyrka/data-anonymization
+  revision: 51b9ee7f17bd3114ccf407e402dde81d9679c3cf
+  branch: update_rails_6.1
+  specs:
+    data-anonymization (0.8.5)
+      activerecord (~> 6.1)
+      activesupport (~> 6.1)
+      composite_primary_keys (~> 13.0)
+      parallel (~> 1.20)
+      powerbar (~> 2.0)
+      rgeo (~> 2.3)
+      rgeo-geojson (~> 2.1)
+      thor (~> 1.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -88,6 +103,8 @@ GEM
       mini_mime (>= 0.1.3)
       ssrf_filter (~> 1.0)
     childprocess (4.1.0)
+    composite_primary_keys (13.0.0)
+      activerecord (~> 6.1.0)
     concurrent-ruby (1.1.9)
     crass (1.0.6)
     devise (4.8.0)
@@ -114,6 +131,7 @@ GEM
       haml (>= 4.0.6, < 6.0)
       html2haml (>= 1.0.1)
       railties (>= 5.1)
+    hashie (5.0.0)
     html2haml (2.2.0)
       erubis (~> 2.7.0)
       haml (>= 4.0, < 6)
@@ -158,6 +176,8 @@ GEM
     parallel (1.21.0)
     parser (3.0.2.0)
       ast (~> 2.4.1)
+    powerbar (2.0.1)
+      hashie (>= 1.1.0)
     public_suffix (4.0.6)
     puma (5.5.2)
       nio4r (~> 2.0)
@@ -208,6 +228,9 @@ GEM
       actionpack (>= 5.0)
       railties (>= 5.0)
     rexml (3.2.5)
+    rgeo (2.3.0)
+    rgeo-geojson (2.1.1)
+      rgeo (>= 1.0.0)
     rspec-core (3.10.1)
       rspec-support (~> 3.10.0)
     rspec-expectations (3.10.1)
@@ -324,6 +347,7 @@ DEPENDENCIES
   byebug
   capybara (>= 3.26)
   carrierwave
+  data-anonymization!
   devise
   haml-rails
   jbuilder (~> 2.7)

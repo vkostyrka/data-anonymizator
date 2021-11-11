@@ -23,6 +23,7 @@ end
 
 group :development do
   gem 'carrierwave'
+  gem 'data-anonymization', git: 'https://github.com/vkostyrka/data-anonymization', branch: 'update_rails_6.1'
   gem 'devise'
   gem 'haml-rails'
   gem 'listen', '~> 3.3'

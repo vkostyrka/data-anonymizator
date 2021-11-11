@@ -25,6 +25,36 @@ class Database < ApplicationRecord
   end
 
   def call_anonymize
-    true
+    new_database = Database.create!(attributes.merge(id: nil, original: self, file: file))
+    old_database = self
+
+    database 'Chinook' do
+      strategy DataAnon::Strategy::Blacklist
+      source_db adapter: 'sqlite3', database: "public#{old_database.file.url}"
+      destination_db adapter: 'sqlite3', database: "public#{new_database.file.url}"
+
+      table 'Employee' do
+        skip do |_index, record|
+          puts record
+          puts record['Title']
+
+          record['Title'] == 'Sales Support Agent'
+        end
+
+        primary_key 'EmployeeId'
+        anonymize('BirthDate').using FieldStrategy::DateTimeDelta.new(1, 1)
+        anonymize('FirstName').using FieldStrategy::RandomFirstName.new
+        anonymize('LastName').using FieldStrategy::RandomLastName.new
+        anonymize('HireDate').using FieldStrategy::DateTimeDelta.new(2, 0)
+        anonymize('Address').using FieldStrategy::RandomAddress.region_US
+        anonymize('City').using FieldStrategy::RandomCity.region_US
+        anonymize('State').using FieldStrategy::RandomProvince.region_US
+        anonymize('PostalCode').using FieldStrategy::RandomZipcode.region_US
+        anonymize('Country') { |_field| 'USA' }
+        anonymize('Phone').using FieldStrategy::RandomPhoneNumber.new
+        anonymize('Fax').using FieldStrategy::RandomPhoneNumber.new
+        anonymize('Email').using FieldStrategy::StringTemplate.new("test+#{row_number}@gmail.com")
+      end
+    end
   end
 end
