@@ -2,7 +2,7 @@
 
 class Database < ApplicationRecord
   belongs_to :user
-  has_many :anonymized, class_name: 'Database', foreign_key: 'original_id'
+  has_many :anonymized, class_name: 'Database', foreign_key: 'original_id', dependent: :delete_all
   belongs_to :original, class_name: 'Database', optional: true
 
   enum dbms_type: { sqlite: 0 }
@@ -30,8 +30,8 @@ class Database < ApplicationRecord
 
     database 'Chinook' do
       strategy DataAnon::Strategy::Blacklist
-      source_db adapter: 'sqlite3', database: "public#{old_database.file.url}"
-      destination_db adapter: 'sqlite3', database: "public#{new_database.file.url}"
+      source_db adapter: 'sqlite3', database: "public#{new_database.file.url}"
+      destination_db adapter: 'sqlite3', database: "public#{old_database.file.url}"
 
       table 'Employee' do
         skip do |_index, record|
@@ -53,7 +53,7 @@ class Database < ApplicationRecord
         anonymize('Country') { |_field| 'USA' }
         anonymize('Phone').using FieldStrategy::RandomPhoneNumber.new
         anonymize('Fax').using FieldStrategy::RandomPhoneNumber.new
-        anonymize('Email').using FieldStrategy::StringTemplate.new("test+#{row_number}@gmail.com")
+        anonymize('Email').using FieldStrategy::StringTemplate.new("test+2@gmail.com")
       end
     end
   end

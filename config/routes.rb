@@ -3,5 +3,6 @@ Rails.application.routes.draw do
   devise_for :users, path: '', path_names: { sign_in: 'login', sign_out: 'logout' }
   resources :database, only: %i[index create show destroy] do
     post :anonymize
+    post :download_file
   end
 end

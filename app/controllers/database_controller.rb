@@ -4,7 +4,8 @@ class DatabaseController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @databases = Database.where(user: current_user)
+    @databases = Database.where(user: current_user, original_id: nil)
+    @anonymized_databases = Database.where(user: current_user).where.not(original_id: nil)
   end
 
   def show
@@ -42,10 +43,17 @@ class DatabaseController < ApplicationController
     redirect_to root_path, alert: "It's not your database" unless current_user.id == @database.user_id
 
     if @database.call_anonymize
-      redirect_to database_path(@database), notice: 'Your database successfully anonymized'
+      redirect_to root_path, notice: 'Your database successfully anonymized'
     else
-      redirect_to database_path(@database), notice: "Your database wasn't anonymized"
+      redirect_to root_path, notice: "Your database wasn't anonymized"
     end
+  end
+
+  def download_file
+    @database = Database.find(params[:database_id])
+    redirect_to root_path, alert: "It's not your database" unless current_user.id == @database.user_id
+
+    send_file(@database.file.file.file)
   end
 
   private

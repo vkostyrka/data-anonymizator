@@ -2,8 +2,12 @@
   Choose table:
   = select_tag(:table_name, options_for_select(@tables_names, @current_table_name), onchange: "handleTableName()")
 
-= form_with url: database_anonymize_path(@database) do |f|
-  = f.submit("Anonymize", class: "btn-secondary btn")
+- if @database.original
+  = form_with url: database_download_file_path(@database) do |f|
+    = f.submit("Download", class: "btn-secondary btn")
+- else
+  = form_with url: database_anonymize_path(@database) do |f|
+    = f.submit("Anonymize", class: "btn-secondary btn")
 
 %table#myTable
   %thead
