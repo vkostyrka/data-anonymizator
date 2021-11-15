@@ -2,6 +2,7 @@
 
 class DatabaseController < ApplicationController
   before_action :authenticate_user!
+  before_action :database, only: [:destroy, :anonymize, :download_file, :show]
 
   def index
     @databases = Database.where(user: current_user, original_id: nil)
@@ -9,10 +10,6 @@ class DatabaseController < ApplicationController
   end
 
   def show
-    @database = Database.find(params[:id])
-
-    redirect_to root_path, alert: "It's not your database" unless current_user.id == @database.user_id
-
     @tables_names = @database.table_names
     @current_table_name = params[:table_name] || @tables_names[0]
     @current_table_columns = @database.table_columns(@current_table_name)
@@ -29,8 +26,6 @@ class DatabaseController < ApplicationController
   end
 
   def destroy
-    @database = Database.find(params[:id])
-    redirect_to root_path, alert: "It's not your database" unless current_user.id == @database.user_id
     if @database.destroy
       redirect_to root_path, notice: 'Your database successfully deleted'
     else
@@ -39,9 +34,6 @@ class DatabaseController < ApplicationController
   end
 
   def anonymize
-    @database = Database.find(params[:database_id])
-    redirect_to root_path, alert: "It's not your database" unless current_user.id == @database.user_id
-
     if @database.call_anonymize
       redirect_to root_path, notice: 'Your database successfully anonymized'
     else
@@ -50,13 +42,15 @@ class DatabaseController < ApplicationController
   end
 
   def download_file
-    @database = Database.find(params[:database_id])
-    redirect_to root_path, alert: "It's not your database" unless current_user.id == @database.user_id
-
     send_file(@database.file.file.file)
   end
 
   private
+
+  def database
+    @database = Database.find(params[:database_id] || params[:id])
+    redirect_to root_path, alert: "It's not your database" unless current_user.id == @database.user_id
+  end
 
   def database_params
     params.require(:database).permit(:dbms_type, :file)
