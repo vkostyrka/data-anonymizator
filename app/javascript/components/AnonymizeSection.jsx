@@ -23,10 +23,12 @@ const AnonymizeSection = ({
   const [modalIsOpen, setIsOpen] = useState(false);
   const [anonymizeData, setAnonymizeData] = useState({});
 
-  console.log(anonymizeData);
-
   const sendToAnonymize = async () => {
-    const response = await axios.post(`/database/${database.id}/anonymize`);
+    const requestData = {
+      database: {strategies: anonymizeData,
+      table_name: currentTableName}
+    }
+    const response = await axios.post(`/database/${database.id}/anonymize`, requestData);
     if (response.data.success) {
       window.location.href = "/";
     }
@@ -35,6 +37,9 @@ const AnonymizeSection = ({
   const handleSelect = (value, columnName) => {
     const updatedData = { ...anonymizeData };
     updatedData[columnName] = value.value;
+    if (value.value === "none") {
+      delete updatedData[columnName]
+    }
     setAnonymizeData(updatedData);
   };
 

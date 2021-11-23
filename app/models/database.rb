@@ -8,6 +8,17 @@ class Database < ApplicationRecord
   enum dbms_type: { sqlite: 0 }
   mount_uploader :file, FileUploader
 
+  STRATEGIES = {
+    first_name: FieldStrategy::RandomFirstName.new,
+    last_name: FieldStrategy::RandomLastName,
+    date_time: FieldStrategy::DateTimeDelta.new(2, 0),
+    address: FieldStrategy::RandomAddress.region_US,
+    city: FieldStrategy::RandomCity.region_US,
+    zip_code: FieldStrategy::RandomZipcode.region_US,
+    phone: FieldStrategy::RandomPhoneNumber.new,
+    email: FieldStrategy::RandomEmail.new,
+  }
+
   def sqlite_database
     SQLite3::Database.new(file.file.file)
   end
@@ -24,28 +35,26 @@ class Database < ApplicationRecord
     sqlite_database.execute("SELECT * FROM #{table_name}")
   end
 
-  def call_anonymize
+  def get_pk_column_name(table_name)
+    sqlite_database.table_info(table_name).find{|column| column["pk"] == 1}["name"]
+  end
+
+  def call_anonymize(params)
     new_database = Database.create!(attributes.merge(id: nil, original: self, file: file))
     old_database = self
 
-    database 'vrg' do
+    database new_database.file.identifier do
       strategy DataAnon::Strategy::Blacklist
       source_db adapter: 'sqlite3', database: "public#{new_database.file.url}"
       destination_db adapter: 'sqlite3', database: "public#{old_database.file.url}"
 
-      table 'Employee' do
-        anonymize('BirthDate').using FieldStrategy::DateTimeDelta.new(1, 1)
-        anonymize('FirstName').using FieldStrategy::RandomFirstName.new
-        anonymize('LastName').using FieldStrategy::RandomLastName.new
-        anonymize('HireDate').using FieldStrategy::DateTimeDelta.new(2, 0)
-        anonymize('Address').using FieldStrategy::RandomAddress.region_US
-        anonymize('City').using FieldStrategy::RandomCity.region_US
-        anonymize('State').using FieldStrategy::RandomProvince.region_US
-        anonymize('PostalCode').using FieldStrategy::RandomZipcode.region_US
-        anonymize('Country') { |_field| 'USA' }
-        anonymize('Phone').using FieldStrategy::RandomPhoneNumber.new
-        anonymize('Fax').using FieldStrategy::RandomPhoneNumber.new
-        anonymize('Email').using FieldStrategy::StringTemplate.new('test+2@gmail.com')
+      table params["table_name"] do
+        primary_key new_database.get_pk_column_name(params["table_name"])
+
+        params["strategies"].keys.each do |column_name|
+          strategy_name = params["strategies"][column_name].to_sym
+          anonymize(column_name).using STRATEGIES[strategy_name]
+        end
       end
     end
   end

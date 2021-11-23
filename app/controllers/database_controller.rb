@@ -35,7 +35,7 @@ class DatabaseController < ApplicationController
   end
 
   def anonymize
-    if @database.call_anonymize
+    if @database.call_anonymize(database_anonymize_params)
       render json: { success: true }
     else
       render json: { success: false }
@@ -55,5 +55,9 @@ class DatabaseController < ApplicationController
 
   def database_params
     params.require(:database).permit(:dbms_type, :file)
+  end
+
+  def database_anonymize_params
+    params.require(:database).permit(:table_name, strategies:{})
   end
 end
