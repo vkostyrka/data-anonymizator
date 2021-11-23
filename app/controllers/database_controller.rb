@@ -58,6 +58,6 @@ class DatabaseController < ApplicationController
   end
 
   def database_anonymize_params
-    params.require(:database).permit(:table_name, strategies:{})
+    params.require(:database).permit(:table_name, strategies: {})
   end
 end

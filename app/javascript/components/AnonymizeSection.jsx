@@ -7,12 +7,20 @@ const dataTypes = [
   { value: "none", label: "None" },
   { value: "first_name", label: "FirstName" },
   { value: "last_name", label: "LastName" },
+  { value: "full_name", label: "FullName" },
   { value: "date_time", label: "DateTime" },
   { value: "address", label: "Address" },
   { value: "city", label: "City" },
   { value: "zip_code", label: "ZipCode" },
+  { value: "province", label: "Province" },
   { value: "phone", label: "Phone" },
   { value: "email", label: "Email" },
+  { value: "big_decimal", label: "BigDecimal" },
+  { value: "bool", label: "Boolean" },
+  { value: "integer", label: "Integer" },
+  { value: "float", label: "Float" },
+  { value: "string", label: "RandomString" },
+  { value: "url", label: "URL" },
 ];
 
 const AnonymizeSection = ({
@@ -25,10 +33,12 @@ const AnonymizeSection = ({
 
   const sendToAnonymize = async () => {
     const requestData = {
-      database: {strategies: anonymizeData,
-      table_name: currentTableName}
-    }
-    const response = await axios.post(`/database/${database.id}/anonymize`, requestData);
+      database: { strategies: anonymizeData, table_name: currentTableName },
+    };
+    const response = await axios.post(
+      `/database/${database.id}/anonymize`,
+      requestData
+    );
     if (response.data.success) {
       window.location.href = "/";
     }
@@ -38,7 +48,7 @@ const AnonymizeSection = ({
     const updatedData = { ...anonymizeData };
     updatedData[columnName] = value.value;
     if (value.value === "none") {
-      delete updatedData[columnName]
+      delete updatedData[columnName];
     }
     setAnonymizeData(updatedData);
   };

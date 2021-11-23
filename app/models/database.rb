@@ -9,15 +9,23 @@ class Database < ApplicationRecord
   mount_uploader :file, FileUploader
 
   STRATEGIES = {
-    first_name: FieldStrategy::RandomFirstName.new,
-    last_name: FieldStrategy::RandomLastName,
-    date_time: FieldStrategy::DateTimeDelta.new(2, 0),
-    address: FieldStrategy::RandomAddress.region_US,
-    city: FieldStrategy::RandomCity.region_US,
-    zip_code: FieldStrategy::RandomZipcode.region_US,
-    phone: FieldStrategy::RandomPhoneNumber.new,
-    email: FieldStrategy::RandomEmail.new,
-  }
+    first_name:  FieldStrategy::RandomFirstName.new,
+    last_name:   FieldStrategy::RandomLastName.new,
+    full_name:   FieldStrategy::RandomFullName.new,
+    date_time:   FieldStrategy::DateTimeDelta.new(2, 0),
+    address:     FieldStrategy::RandomAddress.region_US,
+    city:        FieldStrategy::RandomCity.region_US,
+    zip_code:    FieldStrategy::RandomZipcode.region_US,
+    province:    FieldStrategy::RandomProvince.region_US,
+    phone:       FieldStrategy::RandomPhoneNumber.new,
+    email:       FieldStrategy::RandomEmail.new,
+    big_decimal: FieldStrategy::RandomBigDecimalDelta.new,
+    bool:        FieldStrategy::RandomBoolean.new,
+    integer:     FieldStrategy::RandomInteger.new,
+    float:       FieldStrategy::RandomFloat.new,
+    string:      FieldStrategy::RandomString.new,
+    url:         FieldStrategy::RandomUrl.new
+  }.freeze
 
   def sqlite_database
     SQLite3::Database.new(file.file.file)
@@ -36,7 +44,11 @@ class Database < ApplicationRecord
   end
 
   def get_pk_column_name(table_name)
-    sqlite_database.table_info(table_name).find{|column| column["pk"] == 1}["name"]
+    if (pk_column = sqlite_database.table_info(table_name).find { |column| column['pk'] == 1 })
+      return pk_column['name']
+    end
+
+    sqlite_database.table_info(table_name).find { |column| column['name'].include? '_id' }['name']
   end
 
   def call_anonymize(params)
@@ -48,11 +60,11 @@ class Database < ApplicationRecord
       source_db adapter: 'sqlite3', database: "public#{new_database.file.url}"
       destination_db adapter: 'sqlite3', database: "public#{old_database.file.url}"
 
-      table params["table_name"] do
-        primary_key new_database.get_pk_column_name(params["table_name"])
+      table params['table_name'] do
+        primary_key new_database.get_pk_column_name(params['table_name'])
 
-        params["strategies"].keys.each do |column_name|
-          strategy_name = params["strategies"][column_name].to_sym
+        params['strategies'].each_key do |column_name|
+          strategy_name = params['strategies'][column_name].to_sym
           anonymize(column_name).using STRATEGIES[strategy_name]
         end
       end
