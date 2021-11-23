@@ -38,7 +38,6 @@ class DatabaseController < ApplicationController
     if @database.call_anonymize
       render json: { success: true }
     else
-
       render json: { success: false }
     end
   end

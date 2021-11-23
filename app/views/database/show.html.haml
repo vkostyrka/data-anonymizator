@@ -4,9 +4,9 @@
     = select_tag(:table_name, options_for_select(@tables_names, @current_table_name), onchange: "handleTableName()")
 
   = react_component('AnonymizeSection', { database: @database,
-                                        currentTableName: @current_table_name,
-                                        currentTableColumns: @current_table_columns,
-                                       }, prerender: false)
+                                          currentTableName: @current_table_name,
+                                          currentTableColumns: @current_table_columns,
+                                        }, prerender: false)
 
 
   - if @database.original

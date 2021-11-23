@@ -34,14 +34,6 @@ class Database < ApplicationRecord
       destination_db adapter: 'sqlite3', database: "public#{old_database.file.url}"
 
       table 'Employee' do
-        skip do |_index, record|
-          puts record
-          puts record['Title']
-
-          record['Title'] == 'Sales Support Agent'
-        end
-
-        primary_key 'EmployeeId'
         anonymize('BirthDate').using FieldStrategy::DateTimeDelta.new(1, 1)
         anonymize('FirstName').using FieldStrategy::RandomFirstName.new
         anonymize('LastName').using FieldStrategy::RandomLastName.new

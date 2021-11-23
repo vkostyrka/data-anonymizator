@@ -1,6 +1,9 @@
 {
   "name": "data-anonymizator",
   "private": true,
+  "scripts": {
+    "prettier": "prettier --write \"app/javascript/**/*.{js,jsx}\""
+  },
   "dependencies": {
     "@babel/plugin-syntax-jsx": "^7.16.0",
     "@babel/preset-react": "^7.16.0",
@@ -16,6 +19,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-modal": "^3.14.4",
+    "react-select": "^5.2.1",
     "react_ujs": "^2.6.1",
     "turbolinks": "^5.2.0",
     "webpack": "^4.46.0",
@@ -23,6 +27,7 @@
   },
   "version": "0.1.0",
   "devDependencies": {
+    "prettier": "^2.4.1",
     "webpack-dev-server": "^3"
   }
 }
