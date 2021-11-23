@@ -1,13 +1,17 @@
-.my-2
-  Choose table:
-  = select_tag(:table_name, options_for_select(@tables_names, @current_table_name), onchange: "handleTableName()")
+.d-flex.justify-content-between.my-2
+  .align-items-center.d-flex
+    Choose table:
+    = select_tag(:table_name, options_for_select(@tables_names, @current_table_name), onchange: "handleTableName()")
 
-- if @database.original
-  = form_with url: database_download_file_path(@database) do |f|
-    = f.submit("Download", class: "btn-secondary btn")
-- else
-  = form_with url: database_anonymize_path(@database) do |f|
-    = f.submit("Anonymize", class: "btn-secondary btn")
+  = react_component('AnonymizeSection', { database: @database,
+                                        currentTableName: @current_table_name,
+                                        currentTableColumns: @current_table_columns,
+                                       }, prerender: false)
+
+
+  - if @database.original
+    = form_with url: database_download_file_path(@database) do |f|
+      = f.submit("Download", class: "btn-secondary btn")
 
 %table#myTable
   %thead

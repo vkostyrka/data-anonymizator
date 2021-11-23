@@ -2,7 +2,8 @@
 
 class DatabaseController < ApplicationController
   before_action :authenticate_user!
-  before_action :database, only: [:destroy, :anonymize, :download_file, :show]
+  before_action :database, only: %i[destroy anonymize download_file show]
+  skip_before_action :verify_authenticity_token, only: %i[anonymize]
 
   def index
     @databases = Database.where(user: current_user, original_id: nil)
@@ -35,9 +36,10 @@ class DatabaseController < ApplicationController
 
   def anonymize
     if @database.call_anonymize
-      redirect_to root_path, notice: 'Your database successfully anonymized'
+      render json: { success: true }
     else
-      redirect_to root_path, notice: "Your database wasn't anonymized"
+
+      render json: { success: false }
     end
   end
 

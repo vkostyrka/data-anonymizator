@@ -28,7 +28,7 @@ class Database < ApplicationRecord
     new_database = Database.create!(attributes.merge(id: nil, original: self, file: file))
     old_database = self
 
-    database 'Chinook' do
+    database 'vrg' do
       strategy DataAnon::Strategy::Blacklist
       source_db adapter: 'sqlite3', database: "public#{new_database.file.url}"
       destination_db adapter: 'sqlite3', database: "public#{old_database.file.url}"
@@ -53,7 +53,7 @@ class Database < ApplicationRecord
         anonymize('Country') { |_field| 'USA' }
         anonymize('Phone').using FieldStrategy::RandomPhoneNumber.new
         anonymize('Fax').using FieldStrategy::RandomPhoneNumber.new
-        anonymize('Email').using FieldStrategy::StringTemplate.new("test+2@gmail.com")
+        anonymize('Email').using FieldStrategy::StringTemplate.new('test+2@gmail.com')
       end
     end
   end
