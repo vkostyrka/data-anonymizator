@@ -65,8 +65,8 @@ const AnonymizeSection = ({
   }));
 
   return (
-    <div>
-      <button onClick={() => setIsOpen(true)} className="btn btn-info">
+    <div className="mb-3">
+      <button onClick={() => setIsOpen(true)} className="btn btn-primary">
         Start Anonymization
       </button>
       <Modal
@@ -75,10 +75,16 @@ const AnonymizeSection = ({
         contentLabel="Example Modal"
         ariaHideApp={false}
       >
-        <div>Anonymize table {currentTableName}</div>
+        <h2 className="text-center">
+          Anonymize table <span className="fst-italic">{currentTableName}</span>
+        </h2>
 
         <div>
-          Here is for PK
+          <h5>
+            System checking Primary key for this table -{" "}
+            {currentTablePrimaryKey}
+          </h5>
+          <span>Please reselect this value if you find some mismatch</span>
           <Select
             defaultValue={primaryKeyOptions.find(
               (keyOption) => keyOption.value === primaryKey
@@ -88,20 +94,30 @@ const AnonymizeSection = ({
             components={{ IndicatorSeparator: () => null }}
           />
         </div>
-        {currentTableColumns.map((columnName) => (
-          <div className="my-3 d-flex align-items-center" key={columnName}>
-            <div className="mr-3">{columnName}</div>
-            <div>
-              <Select
-                defaultValue={dataTypes[0]}
-                isSearchable
-                options={dataTypes}
-                onChange={(value) => handleSelect(value, columnName)}
-                components={{ IndicatorSeparator: () => null }}
-              />
-            </div>
-          </div>
-        ))}
+        <table className="table">
+          <thead>
+            <tr>
+              <th scope="col">Column name</th>
+              <th scope="col">Anonymization type</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentTableColumns.map((columnName) => (
+              <tr key={columnName}>
+                <td className="mr-3">{columnName}</td>
+                <td>
+                  <Select
+                    defaultValue={dataTypes[0]}
+                    isSearchable
+                    options={dataTypes}
+                    onChange={(value) => handleSelect(value, columnName)}
+                    components={{ IndicatorSeparator: () => null }}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
         <button className="btn-danger btn" onClick={() => sendToAnonymize()}>
           Anonymize

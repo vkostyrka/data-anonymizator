@@ -4,5 +4,6 @@ Rails.application.routes.draw do
   resources :database, only: %i[index create show destroy] do
     post :anonymize
     post :download_file
+    post :download_csv
   end
 end

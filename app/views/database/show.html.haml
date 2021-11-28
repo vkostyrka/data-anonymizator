@@ -1,18 +1,19 @@
 .d-flex.justify-content-between.my-2
   .align-items-center.d-flex
     Choose table:
-    = select_tag(:table_name, options_for_select(@tables_names, @current_table_name), onchange: "handleTableName()")
+    .mx-4
+      = select_tag(:table_name, options_for_select(@tables_names, @current_table_name), onchange: "handleTableName()")
 
   = react_component('AnonymizeSection', { database: @database,
-                                          currentTableName: @current_table_name,
-                                          currentTableColumns: @current_table_columns,
-                                          currentTablePrimaryKey: @current_table_primary_key,
-                                        }, prerender: false)
-
-
-  - if @database.original
+                                    currentTableName: @current_table_name,
+                                    currentTableColumns: @current_table_columns,
+                                    currentTablePrimaryKey: @current_table_primary_key,
+                                  }, prerender: false)
+  .d-flex
     = form_with url: database_download_file_path(@database) do |f|
-      = f.submit("Download", class: "btn-secondary btn")
+      = f.submit("Download sqlite", class: "btn-warning btn")
+    = form_with url: database_download_csv_path(@database, table_name: @current_table_name) do |f|
+      = f.submit("Convert table to CSV", class: "btn-success btn")
 
 %table#myTable
   %thead

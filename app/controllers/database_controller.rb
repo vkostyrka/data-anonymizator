@@ -2,7 +2,7 @@
 
 class DatabaseController < ApplicationController
   before_action :authenticate_user!
-  before_action :database, only: %i[destroy anonymize download_file show]
+  before_action :database, only: %i[destroy anonymize download_file show download_csv]
   skip_before_action :verify_authenticity_token, only: %i[anonymize]
 
   def index
@@ -46,6 +46,14 @@ class DatabaseController < ApplicationController
 
   def download_file
     send_file(@database.file.file.file)
+  end
+
+  def download_csv
+    table_data = @database.table_data(params[:table_name])
+    csv_file_name = "public/uploads/csv/#{@database.file.identifier.split('.').first}.csv"
+
+    File.write(csv_file_name, table_data.map(&:to_csv).join)
+    send_file(csv_file_name)
   end
 
   private

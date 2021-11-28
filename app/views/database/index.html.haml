@@ -9,11 +9,14 @@
       = form_with model: Database.new, url: database_index_path do |f|
         .modal-body
           .row
-            .col-3
+            .col-9
               = f.label :file
-              = f.label :dbms_type
+            .col-3
+              = f.label :file_type
+          .row
             .col-9
               = f.file_field :file, class: 'mw-100'
+            .col-3
               = f.select :dbms_type, options_for_select(Database.dbms_types.keys)
         .modal-footer
           = f.submit("Create", class: "btn-primary btn")
@@ -27,7 +30,7 @@
       %tr
         %th{:scope => "col"} #
         %th{:scope => "col"} Name
-        %th{:scope => "col"} DBMS Type
+        %th{:scope => "col"} Type
         %th{:scope => "col"} Tables
     %tbody
       - @databases.each_with_index do |database_item, index|
@@ -50,7 +53,7 @@
       %tr
         %th{:scope => "col"} #
         %th{:scope => "col"} Name
-        %th{:scope => "col"} DBMS Type
+        %th{:scope => "col"} Type
         %th{:scope => "col"} Tables
     %tbody
       - @anonymized_databases.each_with_index do |database_item, index|
