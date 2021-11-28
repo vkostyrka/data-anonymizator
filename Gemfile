@@ -12,6 +12,7 @@ gem 'react-rails'
 gem 'sassc', '~> 2.1.0'
 gem 'sass-rails', '>= 6'
 gem 'sqlite3', '~> 1.4'
+gem 'pg'
 gem 'turbolinks', '~> 5'
 gem 'webpacker', '~> 5.0'
 

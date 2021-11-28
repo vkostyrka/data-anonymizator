@@ -12,9 +12,12 @@
 
 ActiveRecord::Schema.define(version: 2021_11_09_200520) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "databases", force: :cascade do |t|
     t.integer "dbms_type", null: false
-    t.integer "user_id"
+    t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "file"
