@@ -15,6 +15,7 @@ class DatabaseController < ApplicationController
     @current_table_name = params[:table_name] || @tables_names[0]
     @current_table_columns = @database.table_columns(@current_table_name)
     @current_table_data = @database.table_data(@current_table_name)
+    @current_table_primary_key = @database.get_pk_column_name(@current_table_name)
   end
 
   def create
@@ -59,6 +60,6 @@ class DatabaseController < ApplicationController
   end
 
   def database_anonymize_params
-    params.require(:database).permit(:table_name, strategies: {})
+    params.require(:database).permit(:table_name, :primary_key, strategies: {})
   end
 end

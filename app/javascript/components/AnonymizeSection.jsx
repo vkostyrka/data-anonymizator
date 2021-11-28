@@ -27,13 +27,19 @@ const AnonymizeSection = ({
   database,
   currentTableName,
   currentTableColumns,
+  currentTablePrimaryKey,
 }) => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [anonymizeData, setAnonymizeData] = useState({});
+  const [primaryKey, setPrimaryKey] = useState(currentTablePrimaryKey);
 
   const sendToAnonymize = async () => {
     const requestData = {
-      database: { strategies: anonymizeData, table_name: currentTableName },
+      database: {
+        strategies: anonymizeData,
+        table_name: currentTableName,
+        primary_key: primaryKey,
+      },
     };
     const response = await axios.post(
       `/database/${database.id}/anonymize`,
@@ -53,6 +59,11 @@ const AnonymizeSection = ({
     setAnonymizeData(updatedData);
   };
 
+  const primaryKeyOptions = currentTableColumns.map((item) => ({
+    value: item,
+    label: item,
+  }));
+
   return (
     <div>
       <button onClick={() => setIsOpen(true)} className="btn btn-info">
@@ -66,6 +77,17 @@ const AnonymizeSection = ({
       >
         <div>Anonymize table {currentTableName}</div>
 
+        <div>
+          Here is for PK
+          <Select
+            defaultValue={primaryKeyOptions.find(
+              (keyOption) => keyOption.value === primaryKey
+            )}
+            options={primaryKeyOptions}
+            onChange={(primaryKey) => setPrimaryKey(primaryKey.value)}
+            components={{ IndicatorSeparator: () => null }}
+          />
+        </div>
         {currentTableColumns.map((columnName) => (
           <div className="my-3 d-flex align-items-center" key={columnName}>
             <div className="mr-3">{columnName}</div>

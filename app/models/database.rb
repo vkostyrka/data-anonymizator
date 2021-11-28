@@ -52,7 +52,7 @@ class Database < ApplicationRecord
       return pk_column['name']
     end
 
-    sqlite_database.table_info(table_name).first["name"]
+    sqlite_database.table_info(table_name).first['name']
   end
 
   def call_anonymize(params)
@@ -65,7 +65,7 @@ class Database < ApplicationRecord
       destination_db adapter: 'sqlite3', database: "public#{old_database.file.url}"
 
       table params['table_name'] do
-        primary_key new_database.get_pk_column_name(params['table_name'])
+        primary_key params['primary_key']
 
         params['strategies'].each_key do |column_name|
           strategy_name = params['strategies'][column_name].to_sym
