@@ -300,6 +300,7 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2)
     semantic_range (3.0.0)
+    sequel (5.50.0)
     sexp_processor (4.16.0)
     spring (3.0.0)
     sprockets (4.0.2)
@@ -374,6 +375,7 @@ DEPENDENCIES
   sass-rails (>= 6)
   sassc (~> 2.1.0)
   selenium-webdriver
+  sequel
   spring
   sqlite3 (~> 1.4)
   turbolinks (~> 5)

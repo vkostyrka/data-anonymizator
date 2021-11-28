@@ -5,7 +5,7 @@ class Database < ApplicationRecord
   has_many :anonymized, class_name: 'Database', foreign_key: 'original_id', dependent: :delete_all
   belongs_to :original, class_name: 'Database', optional: true
 
-  enum dbms_type: { sqlite: 0 }
+  enum dbms_type: { sqlite: 0, csv: 1 }
   mount_uploader :file, FileUploader
 
   STRATEGIES = {
@@ -48,7 +48,11 @@ class Database < ApplicationRecord
       return pk_column['name']
     end
 
-    sqlite_database.table_info(table_name).find { |column| column['name'].include? '_id' }['name']
+    if (pk_column = sqlite_database.table_info(table_name).find { |column| column['name'].include? '_id' })
+      return pk_column['name']
+    end
+
+    sqlite_database.table_info(table_name).first["name"]
   end
 
   def call_anonymize(params)

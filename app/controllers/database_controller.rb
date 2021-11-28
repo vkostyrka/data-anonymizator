@@ -20,6 +20,7 @@ class DatabaseController < ApplicationController
   def create
     @database = Database.new(database_params.merge(user: current_user))
     if @database.save
+      helpers.convert_csv_to_sqlite(@database) if @database.csv?
       redirect_to root_path, notice: 'Your database successful added'
     else
       redirect_to root_path, alert: 'Your database not added'
