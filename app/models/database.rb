@@ -32,7 +32,7 @@ class Database < ApplicationRecord
   end
 
   def table_names
-    sqlite_database.execute("SELECT name FROM sqlite_schema WHERE type='table' AND name NOT LIKE 'sqlite_%';").flatten
+    sqlite_database.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';").flatten
   end
 
   def table_columns(table_name)
