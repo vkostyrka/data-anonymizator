@@ -50,7 +50,7 @@ class DatabaseController < ApplicationController
 
   def download_csv
     table_data = @database.table_data(params[:table_name])
-    csv_file_name = "public/uploads/csv/#{@database.file.identifier.split('.').first}.csv"
+    csv_file_name = "public/uploads/#{@database.file.identifier.split('.').first}.csv"
 
     File.write(csv_file_name, table_data.map(&:to_csv).join)
     send_file(csv_file_name)
